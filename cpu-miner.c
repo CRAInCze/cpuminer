@@ -668,7 +668,8 @@ static void *longpoll_thread(void *userdata)
 			failures = 0;
 			json_decref(val);
 
-			applog(LOG_INFO, "LONGPOLL detected new block");
+			if (!opt_quiet)
+				applog(LOG_INFO, "LONGPOLL detected new block");
 			restart_threads();
 		} else {
 			/* longpoll failed, keep trying */
