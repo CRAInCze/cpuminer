@@ -174,10 +174,446 @@ gen_salsa8_core:
 	shrq	$32, %r15
 	movq	%r15, 88(%rsp)
 	
-	gen_salsa8_core_doubleround
-	gen_salsa8_core_doubleround
-	gen_salsa8_core_doubleround
-	gen_salsa8_core_doubleround
+	#gen_salsa8_core_doubleround
+	movq	72(%rsp), %r15
+	leaq	(%r14, %rdx), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %r9
+	leaq	(%rdi, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %r10
+	leaq	(%rdx, %r9), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r11
+	leaq	(%r15, %r10), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r13
+	leaq	(%r9, %r11), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %r14
+	leaq	(%r10, %r13), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %rdi
+	leaq	(%r11, %r14), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %rdx
+	leaq	(%r13, %rdi), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	48(%rsp), %rbp
+	movq	%r15, 72(%rsp)
+	leaq	(%rax, %rbp), %r15
+	roll	$7, %r15d
+	xorq	%r15, %rbx
+	leaq	(%rbp, %rbx), %r15
+	roll	$9, %r15d
+	xorq	%r15, %rcx
+	leaq	(%rbx, %rcx), %r15
+	roll	$13, %r15d
+	xorq	%r15, %rax
+	leaq	(%rcx, %rax), %r15
+	roll	$18, %r15d
+	xorq	%r15, %rbp
+	movq	88(%rsp), %r15
+	movq	%rbp, 48(%rsp)
+	leaq	(%r12, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %rsi
+	leaq	(%r15, %rsi), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r8
+	leaq	(%rsi, %r8), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %r12
+	leaq	(%r8, %r12), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	%r15, 88(%rsp)
+	movq	72(%rsp), %r15
+	leaq	(%rsi, %rdx), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %rdi
+	leaq	(%r9, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %rax
+	leaq	(%rdx, %rdi), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %rcx
+	leaq	(%r15, %rax), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r8
+	leaq	(%rdi, %rcx), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %rsi
+	leaq	(%rax, %r8), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %r9
+	leaq	(%rcx, %rsi), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %rdx
+	leaq	(%r8, %r9), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	48(%rsp), %rbp
+	movq	%r15, 72(%rsp)
+	leaq	(%r10, %rbp), %r15
+	roll	$7, %r15d
+	xorq	%r15, %r12
+	leaq	(%rbp, %r12), %r15
+	roll	$9, %r15d
+	xorq	%r15, %r11
+	leaq	(%r12, %r11), %r15
+	roll	$13, %r15d
+	xorq	%r15, %r10
+	leaq	(%r11, %r10), %r15
+	roll	$18, %r15d
+	xorq	%r15, %rbp
+	movq	88(%rsp), %r15
+	movq	%rbp, 48(%rsp)
+	leaq	(%rbx, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %r14
+	leaq	(%r15, %r14), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r13
+	leaq	(%r14, %r13), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %rbx
+	leaq	(%r13, %rbx), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	%r15, 88(%rsp)
+
+	#gen_salsa8_core_doubleround
+	movq	72(%rsp), %r15
+	leaq	(%r14, %rdx), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %r9
+	leaq	(%rdi, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %r10
+	leaq	(%rdx, %r9), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r11
+	leaq	(%r15, %r10), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r13
+	leaq	(%r9, %r11), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %r14
+	leaq	(%r10, %r13), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %rdi
+	leaq	(%r11, %r14), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %rdx
+	leaq	(%r13, %rdi), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	48(%rsp), %rbp
+	movq	%r15, 72(%rsp)
+	leaq	(%rax, %rbp), %r15
+	roll	$7, %r15d
+	xorq	%r15, %rbx
+	leaq	(%rbp, %rbx), %r15
+	roll	$9, %r15d
+	xorq	%r15, %rcx
+	leaq	(%rbx, %rcx), %r15
+	roll	$13, %r15d
+	xorq	%r15, %rax
+	leaq	(%rcx, %rax), %r15
+	roll	$18, %r15d
+	xorq	%r15, %rbp
+	movq	88(%rsp), %r15
+	movq	%rbp, 48(%rsp)
+	leaq	(%r12, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %rsi
+	leaq	(%r15, %rsi), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r8
+	leaq	(%rsi, %r8), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %r12
+	leaq	(%r8, %r12), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	%r15, 88(%rsp)
+	movq	72(%rsp), %r15
+	leaq	(%rsi, %rdx), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %rdi
+	leaq	(%r9, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %rax
+	leaq	(%rdx, %rdi), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %rcx
+	leaq	(%r15, %rax), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r8
+	leaq	(%rdi, %rcx), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %rsi
+	leaq	(%rax, %r8), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %r9
+	leaq	(%rcx, %rsi), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %rdx
+	leaq	(%r8, %r9), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	48(%rsp), %rbp
+	movq	%r15, 72(%rsp)
+	leaq	(%r10, %rbp), %r15
+	roll	$7, %r15d
+	xorq	%r15, %r12
+	leaq	(%rbp, %r12), %r15
+	roll	$9, %r15d
+	xorq	%r15, %r11
+	leaq	(%r12, %r11), %r15
+	roll	$13, %r15d
+	xorq	%r15, %r10
+	leaq	(%r11, %r10), %r15
+	roll	$18, %r15d
+	xorq	%r15, %rbp
+	movq	88(%rsp), %r15
+	movq	%rbp, 48(%rsp)
+	leaq	(%rbx, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %r14
+	leaq	(%r15, %r14), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r13
+	leaq	(%r14, %r13), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %rbx
+	leaq	(%r13, %rbx), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	%r15, 88(%rsp)
+
+	#gen_salsa8_core_doubleround
+	movq	72(%rsp), %r15
+	leaq	(%r14, %rdx), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %r9
+	leaq	(%rdi, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %r10
+	leaq	(%rdx, %r9), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r11
+	leaq	(%r15, %r10), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r13
+	leaq	(%r9, %r11), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %r14
+	leaq	(%r10, %r13), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %rdi
+	leaq	(%r11, %r14), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %rdx
+	leaq	(%r13, %rdi), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	48(%rsp), %rbp
+	movq	%r15, 72(%rsp)
+	leaq	(%rax, %rbp), %r15
+	roll	$7, %r15d
+	xorq	%r15, %rbx
+	leaq	(%rbp, %rbx), %r15
+	roll	$9, %r15d
+	xorq	%r15, %rcx
+	leaq	(%rbx, %rcx), %r15
+	roll	$13, %r15d
+	xorq	%r15, %rax
+	leaq	(%rcx, %rax), %r15
+	roll	$18, %r15d
+	xorq	%r15, %rbp
+	movq	88(%rsp), %r15
+	movq	%rbp, 48(%rsp)
+	leaq	(%r12, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %rsi
+	leaq	(%r15, %rsi), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r8
+	leaq	(%rsi, %r8), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %r12
+	leaq	(%r8, %r12), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	%r15, 88(%rsp)
+	movq	72(%rsp), %r15
+	leaq	(%rsi, %rdx), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %rdi
+	leaq	(%r9, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %rax
+	leaq	(%rdx, %rdi), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %rcx
+	leaq	(%r15, %rax), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r8
+	leaq	(%rdi, %rcx), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %rsi
+	leaq	(%rax, %r8), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %r9
+	leaq	(%rcx, %rsi), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %rdx
+	leaq	(%r8, %r9), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	48(%rsp), %rbp
+	movq	%r15, 72(%rsp)
+	leaq	(%r10, %rbp), %r15
+	roll	$7, %r15d
+	xorq	%r15, %r12
+	leaq	(%rbp, %r12), %r15
+	roll	$9, %r15d
+	xorq	%r15, %r11
+	leaq	(%r12, %r11), %r15
+	roll	$13, %r15d
+	xorq	%r15, %r10
+	leaq	(%r11, %r10), %r15
+	roll	$18, %r15d
+	xorq	%r15, %rbp
+	movq	88(%rsp), %r15
+	movq	%rbp, 48(%rsp)
+	leaq	(%rbx, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %r14
+	leaq	(%r15, %r14), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r13
+	leaq	(%r14, %r13), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %rbx
+	leaq	(%r13, %rbx), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	%r15, 88(%rsp)
+
+	#gen_salsa8_core_doubleround
+	movq	72(%rsp), %r15
+	leaq	(%r14, %rdx), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %r9
+	leaq	(%rdi, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %r10
+	leaq	(%rdx, %r9), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r11
+	leaq	(%r15, %r10), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r13
+	leaq	(%r9, %r11), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %r14
+	leaq	(%r10, %r13), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %rdi
+	leaq	(%r11, %r14), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %rdx
+	leaq	(%r13, %rdi), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	48(%rsp), %rbp
+	movq	%r15, 72(%rsp)
+	leaq	(%rax, %rbp), %r15
+	roll	$7, %r15d
+	xorq	%r15, %rbx
+	leaq	(%rbp, %rbx), %r15
+	roll	$9, %r15d
+	xorq	%r15, %rcx
+	leaq	(%rbx, %rcx), %r15
+	roll	$13, %r15d
+	xorq	%r15, %rax
+	leaq	(%rcx, %rax), %r15
+	roll	$18, %r15d
+	xorq	%r15, %rbp
+	movq	88(%rsp), %r15
+	movq	%rbp, 48(%rsp)
+	leaq	(%r12, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %rsi
+	leaq	(%r15, %rsi), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r8
+	leaq	(%rsi, %r8), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %r12
+	leaq	(%r8, %r12), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	%r15, 88(%rsp)
+	movq	72(%rsp), %r15
+	leaq	(%rsi, %rdx), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %rdi
+	leaq	(%r9, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %rax
+	leaq	(%rdx, %rdi), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %rcx
+	leaq	(%r15, %rax), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r8
+	leaq	(%rdi, %rcx), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %rsi
+	leaq	(%rax, %r8), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %r9
+	leaq	(%rcx, %rsi), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %rdx
+	leaq	(%r8, %r9), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	48(%rsp), %rbp
+	movq	%r15, 72(%rsp)
+	leaq	(%r10, %rbp), %r15
+	roll	$7, %r15d
+	xorq	%r15, %r12
+	leaq	(%rbp, %r12), %r15
+	roll	$9, %r15d
+	xorq	%r15, %r11
+	leaq	(%r12, %r11), %r15
+	roll	$13, %r15d
+	xorq	%r15, %r10
+	leaq	(%r11, %r10), %r15
+	roll	$18, %r15d
+	xorq	%r15, %rbp
+	movq	88(%rsp), %r15
+	movq	%rbp, 48(%rsp)
+	leaq	(%rbx, %r15), %rbp
+	roll	$7, %ebp
+	xorq	%rbp, %r14
+	leaq	(%r15, %r14), %rbp
+	roll	$9, %ebp
+	xorq	%rbp, %r13
+	leaq	(%r14, %r13), %rbp
+	roll	$13, %ebp
+	xorq	%rbp, %rbx
+	leaq	(%r13, %rbx), %rbp
+	roll	$18, %ebp
+	xorq	%rbp, %r15
+	movq	%r15, 88(%rsp)
+
 	
 	movl	%edx, %edx
 	shlq	$32, %rdi
@@ -429,7 +865,29 @@ gen_scrypt_core_loop2:
 	movdqa	%xmm15, 112(%rdi)
 	
 	addq	$136, %rsp
-	scrypt_core_cleanup
+	#scrypt_core_cleanup
+#if defined(WIN64)
+	popq	%rsi
+	popq	%rdi
+	movdqa	8(%rsp), %xmm6
+	movdqa	24(%rsp), %xmm7
+	movdqa	40(%rsp), %xmm8
+	movdqa	56(%rsp), %xmm9
+	movdqa	72(%rsp), %xmm10
+	movdqa	88(%rsp), %xmm11
+	movdqa	104(%rsp), %xmm12
+	movdqa	120(%rsp), %xmm13
+	movdqa	136(%rsp), %xmm14
+	movdqa	152(%rsp), %xmm15
+	addq	$176, %rsp
+#endif
+	popq	%r15
+	popq	%r14
+	popq	%r13
+	popq	%r12
+	popq	%rbp
+	popq	%rbx
+
 	ret
 
 
@@ -506,10 +964,290 @@ gen_scrypt_core_loop2:
 .endm
 
 .macro xmm_salsa8_core
-	xmm_salsa8_core_doubleround
-	xmm_salsa8_core_doubleround
-	xmm_salsa8_core_doubleround
-	xmm_salsa8_core_doubleround
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
 .endm
 	
 	.align 32
@@ -650,7 +1388,292 @@ xmm_scrypt_core_loop1:
 	movdqa	%xmm9, %xmm1
 	movdqa	%xmm10, %xmm2
 	movdqa	%xmm11, %xmm3
-	xmm_salsa8_core
+	#xmm_salsa8_core
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+
 	paddd	%xmm0, %xmm8
 	paddd	%xmm1, %xmm9
 	paddd	%xmm2, %xmm10
@@ -664,7 +1687,292 @@ xmm_scrypt_core_loop1:
 	movdqa	%xmm13, %xmm1
 	movdqa	%xmm14, %xmm2
 	movdqa	%xmm15, %xmm3
-	xmm_salsa8_core
+	#xmm_salsa8_core
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+
 	paddd	%xmm0, %xmm12
 	paddd	%xmm1, %xmm13
 	paddd	%xmm2, %xmm14
@@ -704,7 +2012,292 @@ xmm_scrypt_core_loop2:
 	movdqa	%xmm9, %xmm1
 	movdqa	%xmm10, %xmm2
 	movdqa	%xmm11, %xmm3
-	xmm_salsa8_core
+	#xmm_salsa8_core
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+
 	paddd	%xmm0, %xmm8
 	paddd	%xmm1, %xmm9
 	paddd	%xmm2, %xmm10
@@ -718,7 +2311,292 @@ xmm_scrypt_core_loop2:
 	movdqa	%xmm13, %xmm1
 	movdqa	%xmm14, %xmm2
 	movdqa	%xmm15, %xmm3
-	xmm_salsa8_core
+	#xmm_salsa8_core
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+	#xmm_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm3
+	pxor	%xmm5, %xmm3
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm3, %xmm4
+	pshufd	$0x93, %xmm3, %xmm3
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm1
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm1
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm1, %xmm1
+	pxor	%xmm5, %xmm0
+	movdqa	%xmm3, %xmm4
+	
+	paddd	%xmm0, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$7, %xmm4
+	psrld	$25, %xmm5
+	pxor	%xmm4, %xmm1
+	pxor	%xmm5, %xmm1
+	movdqa	%xmm0, %xmm4
+	
+	paddd	%xmm1, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$9, %xmm4
+	psrld	$23, %xmm5
+	pxor	%xmm4, %xmm2
+	movdqa	%xmm1, %xmm4
+	pshufd	$0x93, %xmm1, %xmm1
+	pxor	%xmm5, %xmm2
+	
+	paddd	%xmm2, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$13, %xmm4
+	psrld	$19, %xmm5
+	pxor	%xmm4, %xmm3
+	movdqa	%xmm2, %xmm4
+	pshufd	$0x4e, %xmm2, %xmm2
+	pxor	%xmm5, %xmm3
+	
+	paddd	%xmm3, %xmm4
+	movdqa	%xmm4, %xmm5
+	pslld	$18, %xmm4
+	psrld	$14, %xmm5
+	pxor	%xmm4, %xmm0
+	pshufd	$0x39, %xmm3, %xmm3
+	pxor	%xmm5, %xmm0
+
+
 	paddd	%xmm0, %xmm12
 	paddd	%xmm1, %xmm13
 	paddd	%xmm2, %xmm14
@@ -819,7 +2697,29 @@ xmm_scrypt_core_loop2:
 	movl	%ebx, 92(%rdi)
 	movl	%eax, 76(%rdi)
 	
-	scrypt_core_cleanup
+	#scrypt_core_cleanup
+#if defined(WIN64)
+	popq	%rsi
+	popq	%rdi
+	movdqa	8(%rsp), %xmm6
+	movdqa	24(%rsp), %xmm7
+	movdqa	40(%rsp), %xmm8
+	movdqa	56(%rsp), %xmm9
+	movdqa	72(%rsp), %xmm10
+	movdqa	88(%rsp), %xmm11
+	movdqa	104(%rsp), %xmm12
+	movdqa	120(%rsp), %xmm13
+	movdqa	136(%rsp), %xmm14
+	movdqa	152(%rsp), %xmm15
+	addq	$176, %rsp
+#endif
+	popq	%r15
+	popq	%r14
+	popq	%r13
+	popq	%r12
+	popq	%rbp
+	popq	%rbx
+
 	ret
 
 
@@ -980,10 +2880,538 @@ prefer_dual_scrypt_false:
 .endm
 
 .macro xmm_dual_salsa8_core
-	xmm_dual_salsa8_core_doubleround
-	xmm_dual_salsa8_core_doubleround
-	xmm_dual_salsa8_core_doubleround
-	xmm_dual_salsa8_core_doubleround
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
 .endm
 	
 	
@@ -1171,7 +3599,540 @@ dual_scrypt_core_loop1:
 	movdqa	%xmm9, 16(%rsi)
 	movdqa	%xmm10, 32(%rsi)
 	movdqa	%xmm11, 48(%rsi)
-	xmm_dual_salsa8_core
+	#xmm_dual_salsa8_core
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+
 	paddd	0(%rdi), %xmm0
 	paddd	16(%rdi), %xmm1
 	paddd	32(%rdi), %xmm2
@@ -1205,7 +4166,540 @@ dual_scrypt_core_loop1:
 	movdqa	%xmm9, 80(%rsi)
 	movdqa	%xmm10, 96(%rsi)
 	movdqa	%xmm11, 112(%rsi)
-	xmm_dual_salsa8_core
+	#xmm_dual_salsa8_core
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+
 	paddd	64(%rdi), %xmm0
 	paddd	80(%rdi), %xmm1
 	paddd	96(%rdi), %xmm2
@@ -1294,7 +4788,540 @@ dual_scrypt_core_loop2:
 	movdqa	%xmm13, 80(%rsi)
 	movdqa	%xmm14, 96(%rsi)
 	movdqa	%xmm15, 112(%rsi)
-	xmm_dual_salsa8_core
+	#xmm_dual_salsa8_core
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+
 	paddd	0(%rdi), %xmm0
 	paddd	16(%rdi), %xmm1
 	paddd	32(%rdi), %xmm2
@@ -1328,7 +5355,540 @@ dual_scrypt_core_loop2:
 	movdqa	%xmm9, 80(%rsi)
 	movdqa	%xmm10, 96(%rsi)
 	movdqa	%xmm11, 112(%rsi)
-	xmm_dual_salsa8_core
+	#xmm_dual_salsa8_core
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+	#xmm_dual_salsa8_core_doubleround
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	pshufd	$0x93, %xmm3, %xmm3
+	pshufd	$0x93, %xmm11, %xmm11
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm1, %xmm1
+	pshufd	$0x39, %xmm9, %xmm9
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+	movdqa	%xmm3, %xmm4
+	movdqa	%xmm11, %xmm6
+	
+	paddd	%xmm0, %xmm4
+	paddd	%xmm8, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$7, %xmm4
+	pslld	$7, %xmm6
+	psrld	$25, %xmm5
+	psrld	$25, %xmm7
+	pxor	%xmm4, %xmm1
+	pxor	%xmm6, %xmm9
+	pxor	%xmm5, %xmm1
+	pxor	%xmm7, %xmm9
+	movdqa	%xmm0, %xmm4
+	movdqa	%xmm8, %xmm6
+	
+	paddd	%xmm1, %xmm4
+	paddd	%xmm9, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$9, %xmm4
+	pslld	$9, %xmm6
+	psrld	$23, %xmm5
+	psrld	$23, %xmm7
+	pxor	%xmm4, %xmm2
+	pxor	%xmm6, %xmm10
+	movdqa	%xmm1, %xmm4
+	movdqa	%xmm9, %xmm6
+	pshufd	$0x93, %xmm1, %xmm1
+	pshufd	$0x93, %xmm9, %xmm9
+	pxor	%xmm5, %xmm2
+	pxor	%xmm7, %xmm10
+	
+	paddd	%xmm2, %xmm4
+	paddd	%xmm10, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$13, %xmm4
+	pslld	$13, %xmm6
+	psrld	$19, %xmm5
+	psrld	$19, %xmm7
+	pxor	%xmm4, %xmm3
+	pxor	%xmm6, %xmm11
+	movdqa	%xmm2, %xmm4
+	movdqa	%xmm10, %xmm6
+	pshufd	$0x4e, %xmm2, %xmm2
+	pshufd	$0x4e, %xmm10, %xmm10
+	pxor	%xmm5, %xmm3
+	pxor	%xmm7, %xmm11
+	
+	paddd	%xmm3, %xmm4
+	paddd	%xmm11, %xmm6
+	movdqa	%xmm4, %xmm5
+	movdqa	%xmm6, %xmm7
+	pslld	$18, %xmm4
+	pslld	$18, %xmm6
+	psrld	$14, %xmm5
+	psrld	$14, %xmm7
+	pxor	%xmm4, %xmm0
+	pxor	%xmm6, %xmm8
+	pshufd	$0x39, %xmm3, %xmm3
+	pshufd	$0x39, %xmm11, %xmm11
+	pxor	%xmm5, %xmm0
+	pxor	%xmm7, %xmm8
+
+
 	paddd	64(%rdi), %xmm0
 	paddd	80(%rdi), %xmm1
 	paddd	96(%rdi), %xmm2
