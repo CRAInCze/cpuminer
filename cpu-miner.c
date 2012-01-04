@@ -74,7 +74,7 @@ static inline void affine_to_cpu(int id, int cpu)
 {
 	struct thread_affinity_policy policy;
 
-	policy.affinity_tag = cpu;
+	policy.affinity_tag = cpu + 1;
 	if (thread_policy_set(mach_thread_self(), THREAD_AFFINITY_POLICY,
 				(thread_policy_t)&policy,
 				THREAD_AFFINITY_POLICY_COUNT) == KERN_SUCCESS) {
