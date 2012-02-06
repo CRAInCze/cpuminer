@@ -123,21 +123,20 @@ extern bool opt_debug;
 extern bool opt_protocol;
 extern const uint32_t sha256_init_state[];
 extern json_t *json_rpc_call(CURL *curl, const char *url, const char *userpass,
-			     const char *rpc_req, bool, bool);
+			     const char *rpc_req, bool, bool, int *);
 extern char *bin2hex(const unsigned char *p, size_t len);
 extern bool hex2bin(unsigned char *p, const char *hexstr, size_t len);
 
 extern unsigned char *scrypt_buffer_alloc();
 extern int scanhash_scrypt(int, unsigned char *pdata, unsigned char *scratchbuf,
 	const unsigned char *ptarget,
-	uint32_t max_nonce, unsigned long *nHashesDone);
+	uint32_t max_nonce, uint32_t *next_nonce, unsigned long *hashes_done);
 
 extern int
 timeval_subtract (struct timeval *result, struct timeval *x, struct timeval *y);
 
 extern bool fulltest(const unsigned char *hash, const unsigned char *target);
 
-extern int opt_scantime;
 extern int opt_timeout;
 extern bool want_longpoll;
 extern bool have_longpoll;

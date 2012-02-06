@@ -23,6 +23,7 @@
 #include <windows.h>
 #else
 #include <sys/resource.h>
+#include <sys/sysctl.h>
 #endif
 #include <getopt.h>
 #include <jansson.h>
@@ -32,6 +33,7 @@
 
 #define PROGRAM_NAME		"minerd"
 #define DEF_RPC_URL		"http://127.0.0.1:9332/"
+#define LP_SCANTIME		60
 
 #ifdef __linux /* Linux specific policy and affinity management */
 #include <sched.h>
@@ -126,35 +128,33 @@ static struct option_help options_help[] = {
 	  "(-h) Display this help text" },
 
 	{ "config FILE",
-	  "(-c FILE) JSON-format configuration file (default: none)\n"
-	  "See example-cfg.json for an example configuration." },
+	  "(-c FILE) Load a JSON-format configuration file" },
 
 	{ "algo XXX",
-	  "(-a XXX) Only scrypt (e.g. --algo scrypt) is supported" },
+	  "(-a XXX) Specify the algorithm to use (default: scrypt)" },
 
 	{ "quiet",
-	  "(-q) Disable per-thread hashmeter output (default: off)" },
+	  "(-q) Disable per-thread hashmeter output" },
 
 	{ "debug",
-	  "(-D) Enable debug output (default: off)" },
+	  "(-D) Enable debug output" },
 
 	{ "no-longpoll",
-	  "Disable X-Long-Polling support (default: enabled)" },
+	  "Disable X-Long-Polling support" },
 
 	{ "protocol-dump",
-	  "(-P) Verbose dump of protocol-level activities (default: off)" },
+	  "(-P) Verbose dump of protocol-level activities" },
 
 	{ "retries N",
 	  "(-r N) Number of times to retry if JSON-RPC call fails\n"
 	  "\t(default: retry indefinitely)" },
 
 	{ "retry-pause N",
-	  "(-R N) Number of seconds to pause between retries\n"
-	  "\t(default: 30)" },
+	  "(-R N) Number of seconds to pause between retries (default: 30)" },
 
 	{ "scantime N",
-	  "(-s N) Upper bound on time spent scanning current work,\n"
-	  "\tin seconds. (default: 5)" },
+	  "(-s N) Upper bound on time spent scanning current work, in seconds\n"
+	  "\t(default: 5)" },
 
 	{ "timeout N",
 	  "(-T N) Connection timeout, in seconds (default: 180)" },
@@ -168,11 +168,11 @@ static struct option_help options_help[] = {
 	  "(-t N) Number of miner threads (default: number of processors)" },
 
 	{ "url URL",
-	  "URL for JSON-RPC server "
+	  "(-o URL) URL for JSON-RPC server "
 	  "(default: " DEF_RPC_URL ")" },
 
 	{ "userpass USERNAME:PASSWORD",
-	  "Username:Password pair for JSON-RPC server" },
+	  "(-O USERNAME:PASSWORD) Username:Password pair for JSON-RPC server" },
 
 	{ "user USERNAME",
 	  "(-u USERNAME) Username for JSON-RPC server" },
@@ -198,21 +198,23 @@ static struct option options[] = {
 #ifdef HAVE_SYSLOG_H
 	{ "syslog", 0, NULL, 1004 },
 #endif
-	{ "url", 1, NULL, 1001 },
+	{ "url", 1, NULL, 'o' },
 	{ "user", 1, NULL, 'u' },
-	{ "userpass", 1, NULL, 1002 },
+	{ "userpass", 1, NULL, 'O' },
 
 	{ }
 };
 
 struct work {
 	unsigned char	data[128];
-	unsigned char	hash1[64];
-	unsigned char	midstate[32];
 	unsigned char	target[32];
 
 	unsigned char	hash[32];
 };
+
+static struct work g_work;
+static time_t g_work_time;
+static pthread_mutex_t g_work_lock;
 
 static bool jobj_binary(const json_t *obj, const char *key,
 			void *buf, size_t buflen)
@@ -238,22 +240,10 @@ static bool jobj_binary(const json_t *obj, const char *key,
 
 static bool work_decode(const json_t *val, struct work *work)
 {
-	if (unlikely(!jobj_binary(val, "midstate",
-			 work->midstate, sizeof(work->midstate)))) {
-		applog(LOG_ERR, "JSON inval midstate");
-		goto err_out;
-	}
-
 	if (unlikely(!jobj_binary(val, "data", work->data, sizeof(work->data)))) {
 		applog(LOG_ERR, "JSON inval data");
 		goto err_out;
 	}
-
-	if (unlikely(!jobj_binary(val, "hash1", work->hash1, sizeof(work->hash1)))) {
-		applog(LOG_ERR, "JSON inval hash1");
-		goto err_out;
-	}
-
 	if (unlikely(!jobj_binary(val, "target", work->target, sizeof(work->target)))) {
 		applog(LOG_ERR, "JSON inval target");
 		goto err_out;
@@ -275,6 +265,10 @@ static bool submit_upstream_work(CURL *curl, const struct work *work)
 	double hashrate;
 	int i;
 	bool rc = false;
+	
+	/* pass if the previous hash is not the current previous hash */
+	if (memcmp(work->data + 4, g_work.data + 4, 32))
+		return true;
 
 	/* build hex string */
 	hexstr = bin2hex(work->data, sizeof(work->data));
@@ -288,11 +282,8 @@ static bool submit_upstream_work(CURL *curl, const struct work *work)
 	      "{\"method\": \"getwork\", \"params\": [ \"%s\" ], \"id\":1}\r\n",
 		hexstr);
 
-	if (opt_debug)
-		applog(LOG_DEBUG, "DBG: sending RPC call: %s", s);
-
 	/* issue JSON-RPC request */
-	val = json_rpc_call(curl, rpc_url, rpc_userpass, s, false, false);
+	val = json_rpc_call(curl, rpc_url, rpc_userpass, s, false, false, NULL);
 	if (unlikely(!val)) {
 		applog(LOG_ERR, "submit_upstream_work json_rpc_call failed");
 		goto out;
@@ -300,19 +291,18 @@ static bool submit_upstream_work(CURL *curl, const struct work *work)
 
 	res = json_object_get(val, "result");
 	
-	pthread_mutex_lock(&stats_lock);
-	json_is_true(res) ? accepted_count++ : rejected_count++;
-	pthread_mutex_unlock(&stats_lock);
-	
 	hashrate = 0.;
+	pthread_mutex_lock(&stats_lock);
 	for (i = 0; i < opt_n_threads; i++)
 		hashrate += thr_hashrates[i];
+	json_is_true(res) ? accepted_count++ : rejected_count++;
+	pthread_mutex_unlock(&stats_lock);
 	
 	applog(LOG_INFO, "accepted: %lu/%lu (%.2f%%), %.2f khash/s %s",
 	       accepted_count,
 	       accepted_count + rejected_count,
 	       100. * accepted_count / (accepted_count + rejected_count),
-	       hashrate,
+	       1e-3 * hashrate,
 	       json_is_true(res) ? "(yay!!!)" : "(booooo)");
 
 	json_decref(val);
@@ -333,7 +323,7 @@ static bool get_upstream_work(CURL *curl, struct work *work)
 	bool rc;
 
 	val = json_rpc_call(curl, rpc_url, rpc_userpass, rpc_req,
-			    want_longpoll, false);
+			    want_longpoll, false, NULL);
 	if (!val)
 		return false;
 
@@ -456,22 +446,6 @@ static void *workio_thread(void *userdata)
 	return NULL;
 }
 
-static void hashmeter(int thr_id, const struct timeval *diff,
-		      unsigned long hashes_done)
-{
-	double khashes, secs;
-
-	khashes = hashes_done / 1000.0;
-	secs = (double)diff->tv_sec + ((double)diff->tv_usec / 1000000.0);
-	
-	thr_hashrates[thr_id] = khashes / secs;
-	
-	if (!opt_quiet)
-		applog(LOG_INFO, "thread %d: %lu hashes, %.2f khash/s",
-		       thr_id, hashes_done,
-		       khashes / secs);
-}
-
 static bool get_work(struct thr_info *thr, struct work *work)
 {
 	struct workio_cmd *wc;
@@ -535,7 +509,8 @@ static void *miner_thread(void *userdata)
 {
 	struct thr_info *mythr = userdata;
 	int thr_id = mythr->id;
-	uint32_t max_nonce = 0xffffff;
+	uint32_t max_nonce;
+	uint32_t next_nonce;
 	unsigned char *scratchbuf = NULL;
 
 	/* Set worker threads to nice 19 and then preferentially to SCHED_IDLE
@@ -552,32 +527,54 @@ static void *miner_thread(void *userdata)
 	if (opt_algo == ALGO_SCRYPT)
 	{
 		scratchbuf = scrypt_buffer_alloc();
-		max_nonce = 0xffff;
 	}
 
 	while (1) {
 		struct work work __attribute__((aligned(128)));
 		unsigned long hashes_done;
 		struct timeval tv_start, tv_end, diff;
-		int diffms;
-		uint64_t max64;
+		int64_t max64;
 		bool rc;
 
 		/* obtain new work from internal workio thread */
-		if (unlikely(!get_work(mythr, &work))) {
-			applog(LOG_ERR, "work retrieval failed, exiting "
-				"mining thread %d", mythr->id);
-			goto out;
+		pthread_mutex_lock(&g_work_lock);
+		if (!have_longpoll || time(NULL) >= g_work_time + LP_SCANTIME*3/4) {
+			if (unlikely(!get_work(mythr, &g_work))) {
+				applog(LOG_ERR, "work retrieval failed, exiting "
+					"mining thread %d", mythr->id);
+				pthread_mutex_unlock(&g_work_lock);
+				goto out;
+			}
+			time(&g_work_time);
+			if (opt_debug)
+				applog(LOG_DEBUG, "DEBUG: got new work");
 		}
-
+		if (memcmp(work.data, g_work.data, 76)) {
+			memcpy(&work, &g_work, sizeof(struct work));
+			next_nonce = 0xffffffffU / opt_n_threads * thr_id;
+		}
+		pthread_mutex_unlock(&g_work_lock);
+		work_restart[thr_id].restart = 0;
+		
+		/* adjust max_nonce to meet target scan time */
+		max64 = g_work_time + (have_longpoll ? LP_SCANTIME : opt_scantime)
+		      - time(NULL);
+		max64 *= thr_hashrates[thr_id];
+		if (max64 <= 0)
+			max64 = 0xfffLL;
+		if (next_nonce + max64 > 0xfffffffeLL)
+			max_nonce = 0xfffffffeU;
+		else
+			max_nonce = next_nonce + max64;
+		
 		hashes_done = 0;
 		gettimeofday(&tv_start, NULL);
 
 		/* scan nonces for a proof-of-work hash */
 		switch (opt_algo) {
 		case ALGO_SCRYPT:
-			rc = scanhash_scrypt(thr_id, work.data, scratchbuf,
-			                     work.target, max_nonce, &hashes_done);
+			rc = scanhash_scrypt(thr_id, work.data, scratchbuf, work.target,
+			                     max_nonce, &next_nonce, &hashes_done);
 			break;
 
 		default:
@@ -588,18 +585,15 @@ static void *miner_thread(void *userdata)
 		/* record scanhash elapsed time */
 		gettimeofday(&tv_end, NULL);
 		timeval_subtract(&diff, &tv_end, &tv_start);
-
-		hashmeter(thr_id, &diff, hashes_done);
-
-		/* adjust max_nonce to meet target scan time */
-		diffms = diff.tv_sec * 1000 + diff.tv_usec / 1000;
-		if (diffms > 0) {
-			max64 =
-			   ((uint64_t)hashes_done * opt_scantime * 1000) / diffms;
-			if (max64 > 0xfffffffaULL)
-				max64 = 0xfffffffaULL;
-			max_nonce = max64;
+		if (diff.tv_usec || diff.tv_sec) {
+			pthread_mutex_lock(&stats_lock);
+			thr_hashrates[thr_id] =
+				hashes_done / (diff.tv_sec + 1e-6 * diff.tv_usec);
+			pthread_mutex_unlock(&stats_lock);
 		}
+		if (!opt_quiet)
+			applog(LOG_INFO, "thread %d: %lu hashes, %.2f khash/s",
+				   thr_id, hashes_done, 1e-3 * thr_hashrates[thr_id]);
 
 		/* if nonce found, submit work */
 		if (rc && !submit_work(mythr, &work))
@@ -661,17 +655,30 @@ static void *longpoll_thread(void *userdata)
 
 	while (1) {
 		json_t *val;
+		int err;
 
 		val = json_rpc_call(curl, lp_url, rpc_userpass, rpc_req,
-				    false, true);
+				    false, true, &err);
 		if (likely(val)) {
 			failures = 0;
-			json_decref(val);
-
 			applog(LOG_INFO, "LONGPOLL detected new block");
-			restart_threads();
+			pthread_mutex_lock(&g_work_lock);
+			if (work_decode(json_object_get(val, "result"), &g_work)) {
+				if (opt_debug)
+					applog(LOG_DEBUG, "DEBUG: got new work");
+				time(&g_work_time);
+				restart_threads();
+			}
+			pthread_mutex_unlock(&g_work_lock);
+			json_decref(val);
 		} else {
-			/* longpoll failed, keep trying */
+			pthread_mutex_lock(&g_work_lock);
+			g_work_time -= LP_SCANTIME;
+			pthread_mutex_unlock(&g_work_lock);
+			restart_threads();
+			if (err != CURLE_OPERATION_TIMEDOUT) {
+				sleep(opt_fail_pause);
+			}
 		}
 	}
 
@@ -784,7 +791,7 @@ static void parse_arg (int key, char *arg)
 		free(rpc_user);
 		rpc_user = strdup(arg);
 		break;
-	case 1001:			/* --url */
+	case 'o':			/* --url */
 		if (strncmp(arg, "http://", 7) &&
 		    strncmp(arg, "https://", 8))
 			show_usage();
@@ -792,7 +799,7 @@ static void parse_arg (int key, char *arg)
 		free(rpc_url);
 		rpc_url = strdup(arg);
 		break;
-	case 1002:			/* --userpass */
+	case 'O':			/* --userpass */
 		if (!strchr(arg, ':'))
 			show_usage();
 
@@ -813,9 +820,17 @@ static void parse_arg (int key, char *arg)
 	SYSTEM_INFO sysinfo;
 	GetSystemInfo(&sysinfo);
 	num_processors = sysinfo.dwNumberOfProcessors;
-#else
+#elif defined(_SC_NPROCESSORS_ONLN)
 	num_processors = sysconf(_SC_NPROCESSORS_ONLN);
+#elif defined(HW_NCPU)
+	int req[] = { CTL_HW, HW_NCPU };
+	size_t len = sizeof(num_processors);
+	v = sysctl(req, 2, &num_processors, &len, NULL, 0);
+#else
+	num_processors = 1;
 #endif
+	if (num_processors < 1)
+		num_processors = 1;
 	if (!opt_n_threads)
 		opt_n_threads = num_processors;
 }
@@ -857,7 +872,7 @@ static void parse_cmdline(int argc, char *argv[])
 	int key;
 
 	while (1) {
-		key = getopt_long(argc, argv, "a:c:qDPr:s:T:t:h?", options, NULL);
+		key = getopt_long(argc, argv, "hc:a:qDPr:s:T:t:o:O:u:p:", options, NULL);
 		if (key < 0)
 			break;
 
@@ -879,6 +894,7 @@ int main(int argc, char *argv[])
 
 	pthread_mutex_init(&time_lock, NULL);
 	pthread_mutex_init(&stats_lock, NULL);
+	pthread_mutex_init(&g_work_lock, NULL);
 
 	if (!rpc_userpass) {
 		if (!rpc_user || !rpc_pass) {
