@@ -118,7 +118,7 @@ static size_t all_data_cb(const void *ptr, size_t size, size_t nmemb,
 	size_t len = size * nmemb;
 	size_t oldlen, newlen;
 	void *newmem;
-	static const unsigned char zero;
+	static const unsigned char zero = 0;
 
 	oldlen = db->len;
 	newlen = oldlen + len;
@@ -213,7 +213,7 @@ json_t *json_rpc_call(CURL *curl, const char *url,
 	struct upload_buffer upload_data;
 	json_error_t err = { };
 	struct curl_slist *headers = NULL;
-	char len_hdr[64], user_agent_hdr[128];
+	char len_hdr[64];
 	char curl_err_str[CURL_ERROR_SIZE];
 	long timeout = opt_timeout;
 	struct header_info hi = { };
@@ -255,12 +255,14 @@ json_t *json_rpc_call(CURL *curl, const char *url,
 	upload_data.len = strlen(rpc_req);
 	sprintf(len_hdr, "Content-Length: %lu",
 		(unsigned long) upload_data.len);
-	sprintf(user_agent_hdr, "User-Agent: %s", PACKAGE_STRING);
 
 	headers = curl_slist_append(headers,
-		"Content-type: application/json");
+		"Content-Type: application/json");
 	headers = curl_slist_append(headers, len_hdr);
-	headers = curl_slist_append(headers, user_agent_hdr);
+	headers = curl_slist_append(headers, "User-Agent: " PACKAGE_STRING);
+	headers = curl_slist_append(headers,
+		"X-Mining-Extensions: midstate");
+	headers = curl_slist_append(headers, "Accept:"); /* disable Accept hdr*/
 	headers = curl_slist_append(headers, "Expect:"); /* disable Expect hdr*/
 
 	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
@@ -277,11 +279,15 @@ json_t *json_rpc_call(CURL *curl, const char *url,
 	/* If X-Long-Polling was found, activate long polling */
 	if (hi.lp_path) {
 		have_longpoll = true;
-		opt_scantime = 60;
 		tq_push(thr_info[longpoll_thr_id].q, hi.lp_path);
 	} else
 		free(hi.lp_path);
 	hi.lp_path = NULL;
+
+	if (!all_data.buf) {
+		applog(LOG_ERR, "Empty data received in json_rpc_call.");
+		goto err_out;
+	}
 
 	val = JSON_LOADS(all_data.buf, &err);
 	if (!val) {

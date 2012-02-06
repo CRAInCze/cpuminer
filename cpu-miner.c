@@ -33,6 +33,7 @@
 
 #define PROGRAM_NAME		"minerd"
 #define DEF_RPC_URL		"http://127.0.0.1:9332/"
+#define LP_SCANTIME		60
 
 #ifdef __linux /* Linux specific policy and affinity management */
 #include <sched.h>
@@ -231,8 +232,6 @@ static struct option options[] = {
 
 struct work {
 	unsigned char	data[128];
-	unsigned char	hash1[64];
-	unsigned char	midstate[32];
 	unsigned char	target[32];
 
 	unsigned char	hash[32];
@@ -266,22 +265,10 @@ static bool jobj_binary(const json_t *obj, const char *key,
 
 static bool work_decode(const json_t *val, struct work *work)
 {
-	if (unlikely(!jobj_binary(val, "midstate",
-			 work->midstate, sizeof(work->midstate)))) {
-		applog(LOG_ERR, "JSON inval midstate");
-		goto err_out;
-	}
-
 	if (unlikely(!jobj_binary(val, "data", work->data, sizeof(work->data)))) {
 		applog(LOG_ERR, "JSON inval data");
 		goto err_out;
 	}
-
-	if (unlikely(!jobj_binary(val, "hash1", work->hash1, sizeof(work->hash1)))) {
-		applog(LOG_ERR, "JSON inval hash1");
-		goto err_out;
-	}
-
 	if (unlikely(!jobj_binary(val, "target", work->target, sizeof(work->target)))) {
 		applog(LOG_ERR, "JSON inval target");
 		goto err_out;
@@ -303,6 +290,10 @@ static bool submit_upstream_work(CURL *curl, const struct work *work)
 	double hashrate;
 	int i;
 	bool rc = false;
+	
+	/* pass if the previous hash is not the current previous hash */
+	if (memcmp(work->data + 4, g_work.data + 4, 32))
+		return true;
 
 	/* build hex string */
 	hexstr = bin2hex(work->data, sizeof(work->data));
@@ -325,13 +316,12 @@ static bool submit_upstream_work(CURL *curl, const struct work *work)
 
 	res = json_object_get(val, "result");
 	
-	pthread_mutex_lock(&stats_lock);
-	json_is_true(res) ? accepted_count++ : rejected_count++;
-	pthread_mutex_unlock(&stats_lock);
-	
 	hashrate = 0.;
+	pthread_mutex_lock(&stats_lock);
 	for (i = 0; i < opt_n_threads; i++)
 		hashrate += thr_hashrates[i];
+	json_is_true(res) ? accepted_count++ : rejected_count++;
+	pthread_mutex_unlock(&stats_lock);
 	
 	applog(LOG_INFO, "accepted: %lu/%lu (%.2f%%), %.2f khash/s %s",
 	       accepted_count,
@@ -573,7 +563,7 @@ static void *miner_thread(void *userdata)
 
 		/* obtain new work from internal workio thread */
 		pthread_mutex_lock(&g_work_lock);
-		if (!have_longpoll || time(NULL) >= g_work_time + opt_scantime) {
+		if (!have_longpoll || time(NULL) >= g_work_time + LP_SCANTIME*3/4) {
 			if (unlikely(!get_work(mythr, &g_work))) {
 				applog(LOG_ERR, "work retrieval failed, exiting "
 					"mining thread %d", mythr->id);
@@ -592,8 +582,9 @@ static void *miner_thread(void *userdata)
 		work_restart[thr_id].restart = 0;
 		
 		/* adjust max_nonce to meet target scan time */
-		max64 = (g_work_time + opt_scantime - time(NULL)) *
-			(int64_t)thr_hashrates[thr_id];
+		max64 = g_work_time + (have_longpoll ? LP_SCANTIME : opt_scantime)
+		      - time(NULL);
+		max64 *= thr_hashrates[thr_id];
 		if (max64 <= 0)
 			max64 = 0xfffLL;
 		if (next_nonce + max64 > 0xfffffffeLL)
@@ -619,8 +610,12 @@ static void *miner_thread(void *userdata)
 		/* record scanhash elapsed time */
 		gettimeofday(&tv_end, NULL);
 		timeval_subtract(&diff, &tv_end, &tv_start);
-		thr_hashrates[thr_id] =
-			hashes_done / (diff.tv_sec + 1e-6 * diff.tv_usec);
+		if (diff.tv_usec || diff.tv_sec) {
+			pthread_mutex_lock(&stats_lock);
+			thr_hashrates[thr_id] =
+				hashes_done / (diff.tv_sec + 1e-6 * diff.tv_usec);
+			pthread_mutex_unlock(&stats_lock);
+		}
 		if (!opt_quiet)
 			applog(LOG_INFO, "thread %d: %lu hashes, %.2f khash/s",
 				   thr_id, hashes_done, 1e-3 * thr_hashrates[thr_id]);
@@ -702,12 +697,14 @@ static void *longpoll_thread(void *userdata)
 			}
 			pthread_mutex_unlock(&g_work_lock);
 			json_decref(val);
-		} else if (err != CURLE_OPERATION_TIMEDOUT) {
+		} else {
 			pthread_mutex_lock(&g_work_lock);
-			g_work_time -= opt_scantime;
+			g_work_time -= LP_SCANTIME;
 			pthread_mutex_unlock(&g_work_lock);
 			restart_threads();
-			sleep(opt_fail_pause);
+			if (err != CURLE_OPERATION_TIMEDOUT) {
+				sleep(opt_fail_pause);
+			}
 		}
 	}
 
