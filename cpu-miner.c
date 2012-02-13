@@ -1,6 +1,6 @@
 
 /*
- * Copyright 2010 Jeff Garzik
+ * Copyright 2010 Jeff Garzik, 2012 pooler
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -93,6 +93,7 @@ bool opt_debug = false;
 bool opt_protocol = false;
 bool want_longpoll = true;
 bool have_longpoll = false;
+static bool submit_old = false;
 bool use_syslog = false;
 static bool opt_quiet = false;
 static int opt_retries = -1;
@@ -118,73 +119,37 @@ static unsigned long accepted_count = 0L;
 static unsigned long rejected_count = 0L;
 double *thr_hashrates;
 
-struct option_help {
-	const char	*name;
-	const char	*helptext;
-};
-
-static struct option_help options_help[] = {
-	{ "help",
-	  "(-h) Display this help text" },
-
-	{ "version",
-	  "(-V) Display version information and exit" },
-
-	{ "config FILE",
-	  "(-c FILE) Load a JSON-format configuration file" },
-
-	{ "algo XXX",
-	  "(-a XXX) Specify the algorithm to use (default: scrypt)" },
-
-	{ "quiet",
-	  "(-q) Disable per-thread hashmeter output" },
-
-	{ "debug",
-	  "(-D) Enable debug output" },
-
-	{ "no-longpoll",
-	  "Disable X-Long-Polling support" },
-
-	{ "protocol-dump",
-	  "(-P) Verbose dump of protocol-level activities" },
-
-	{ "retries N",
-	  "(-r N) Number of times to retry if JSON-RPC call fails\n"
-	  "\t(default: retry indefinitely)" },
-
-	{ "retry-pause N",
-	  "(-R N) Number of seconds to pause between retries (default: 30)" },
-
-	{ "scantime N",
-	  "(-s N) Upper bound on time spent scanning current work, in seconds\n"
-	  "\t(default: 5)" },
-
-	{ "timeout N",
-	  "(-T N) Connection timeout, in seconds (default: 180)" },
-
+static char const usage[] = "\
+Usage: " PROGRAM_NAME " [OPTIONS]\n\
+Options:\n\
+  -o, --url=URL         URL of mining server (default: " DEF_RPC_URL ")\n\
+  -O, --userpass=U:P    username:password pair for mining server\n\
+  -u, --user=USERNAME   username for mining server\n\
+  -p, --pass=PASSWORD   password for mining server\n\
+  -t, --threads=N       number of miner threads (default: number of processors)\n\
+  -r, --retries=N       number of times to retry if a network call fails\n\
+                          (default: retry indefinitely)\n\
+  -R, --retry-pause=N   time to pause between retries, in seconds (default: 30)\n\
+  -T, --timeout=N       network timeout, in seconds (default: 180)\n\
+  -s, --scantime=N      upper bound on time spent scanning current work,\n\
+                          in seconds (default: 5)\n\
+      --no-longpoll     disable X-Long-Polling support\n\
+  -q, --quiet           disable per-thread hashmeter output\n\
+  -D, --debug           enable debug output\n\
+  -P, --protocol-dump   verbose dump of protocol-level activities\n"
 #ifdef HAVE_SYSLOG_H
-	{ "syslog",
-	  "Use system log for output messages (default: standard error)" },
+"\
+      --syslog          use system log for output messages\n"
 #endif
+"\
+  -c, --config=FILE     load a JSON-format configuration file\n\
+  -V, --version         display version information and exit\n\
+  -h, --help            display this help text and exit\n\
+";
 
-	{ "threads N",
-	  "(-t N) Number of miner threads (default: number of processors)" },
+static char const short_options[] = "a:c:Dhp:Pqr:R:s:t:T:o:u:O:V";
 
-	{ "url URL",
-	  "(-o URL) URL for JSON-RPC server "
-	  "(default: " DEF_RPC_URL ")" },
-
-	{ "userpass USERNAME:PASSWORD",
-	  "(-O USERNAME:PASSWORD) Username:Password pair for JSON-RPC server" },
-
-	{ "user USERNAME",
-	  "(-u USERNAME) Username for JSON-RPC server" },
-
-	{ "pass PASSWORD",
-	  "(-p PASSWORD) Password for JSON-RPC server" },
-};
-
-static struct option options[] = {
+static struct option const options[] = {
 	{ "algo", 1, NULL, 'a' },
 	{ "config", 1, NULL, 'c' },
 	{ "debug", 0, NULL, 'D' },
@@ -193,14 +158,14 @@ static struct option options[] = {
 	{ "pass", 1, NULL, 'p' },
 	{ "protocol-dump", 0, NULL, 'P' },
 	{ "quiet", 0, NULL, 'q' },
-	{ "threads", 1, NULL, 't' },
 	{ "retries", 1, NULL, 'r' },
 	{ "retry-pause", 1, NULL, 'R' },
 	{ "scantime", 1, NULL, 's' },
-	{ "timeout", 1, NULL, 'T' },
 #ifdef HAVE_SYSLOG_H
 	{ "syslog", 0, NULL, 1004 },
 #endif
+	{ "threads", 1, NULL, 't' },
+	{ "timeout", 1, NULL, 'T' },
 	{ "url", 1, NULL, 'o' },
 	{ "user", 1, NULL, 'u' },
 	{ "userpass", 1, NULL, 'O' },
@@ -269,6 +234,10 @@ static bool submit_upstream_work(CURL *curl, const struct work *work)
 	double hashrate;
 	int i;
 	bool rc = false;
+
+	/* pass if the previous hash is not the current previous hash */
+	if (!submit_old && memcmp(work->data + 4, g_work.data + 4, 32))
+		return true;
 
 	/* build hex string */
 	hexstr = bin2hex(work->data, sizeof(work->data));
@@ -618,10 +587,16 @@ static void *longpoll_thread(void *userdata)
 {
 	struct thr_info *mythr = userdata;
 	CURL *curl = NULL;
-	char *copy_start, *hdr_path, *lp_url = NULL;
+	char *copy_start, *hdr_path = NULL, *lp_url = NULL;
 	bool need_slash = false;
-	int failures = 0;
 
+	curl = curl_easy_init();
+	if (unlikely(!curl)) {
+		applog(LOG_ERR, "CURL initialization failed");
+		goto out;
+	}
+
+start:
 	hdr_path = tq_pop(mythr->q, NULL);
 	if (!hdr_path)
 		goto out;
@@ -647,21 +622,16 @@ static void *longpoll_thread(void *userdata)
 
 	applog(LOG_INFO, "Long-polling activated for %s", lp_url);
 
-	curl = curl_easy_init();
-	if (unlikely(!curl)) {
-		applog(LOG_ERR, "CURL initialization failed");
-		goto out;
-	}
-
 	while (1) {
-		json_t *val;
+		json_t *val, *soval;
 		int err;
 
 		val = json_rpc_call(curl, lp_url, rpc_userpass, rpc_req,
 				    false, true, &err);
 		if (likely(val)) {
-			failures = 0;
 			applog(LOG_INFO, "LONGPOLL detected new block");
+			soval = json_object_get(json_object_get(val, "result"), "submitold");
+			submit_old = soval ? json_is_true(soval) : false;
 			pthread_mutex_lock(&g_work_lock);
 			if (work_decode(json_object_get(val, "result"), &g_work)) {
 				if (opt_debug)
@@ -675,9 +645,16 @@ static void *longpoll_thread(void *userdata)
 			pthread_mutex_lock(&g_work_lock);
 			g_work_time -= LP_SCANTIME;
 			pthread_mutex_unlock(&g_work_lock);
-			restart_threads();
-			if (err != CURLE_OPERATION_TIMEDOUT) {
+			if (err == CURLE_OPERATION_TIMEDOUT) {
+				restart_threads();
+			} else {
+				have_longpoll = false;
+				restart_threads();
+				free(hdr_path);
+				free(lp_url);
+				lp_url = NULL;
 				sleep(opt_fail_pause);
+				goto start;
 			}
 		}
 	}
@@ -700,21 +677,16 @@ static void show_version_and_exit(void)
 
 static void show_usage_and_exit(int status)
 {
-	int i;
-
-	printf("Usage: minerd [options]\n\nSupported options:\n");
-	for (i = 0; i < ARRAY_SIZE(options_help); i++) {
-		struct option_help *h;
-
-		h = &options_help[i];
-		printf("--%s\n%s\n\n", h->name, h->helptext);
-	}
-
+	if (status)
+		fprintf(stderr, "Try `" PROGRAM_NAME " --help' for more information.\n");
+	else
+		printf(usage);
 	exit(status);
 }
 
 static void parse_arg (int key, char *arg)
 {
+	char *p;
 	int v, i;
 
 	switch(key) {
@@ -803,6 +775,16 @@ static void parse_arg (int key, char *arg)
 
 		free(rpc_url);
 		rpc_url = strdup(arg);
+		p = strchr(rpc_url, '@');
+		if (p) {
+			char *ap = strstr(rpc_url, "//") + 2;
+			*p = '\0';
+			if (!strchr(ap, ':'))
+				show_usage_and_exit(1);
+			free(rpc_userpass);
+			rpc_userpass = strdup(ap);
+			strcpy(ap, p + 1);
+		}
 		break;
 	case 'O':			/* --userpass */
 		if (!strchr(arg, ':'))
@@ -824,24 +806,6 @@ static void parse_arg (int key, char *arg)
 	default:
 		show_usage_and_exit(1);
 	}
-
-#if defined(WIN32) || defined(WIN64)
-	SYSTEM_INFO sysinfo;
-	GetSystemInfo(&sysinfo);
-	num_processors = sysinfo.dwNumberOfProcessors;
-#elif defined(_SC_NPROCESSORS_ONLN)
-	num_processors = sysconf(_SC_NPROCESSORS_ONLN);
-#elif defined(HW_NCPU)
-	int req[] = { CTL_HW, HW_NCPU };
-	size_t len = sizeof(num_processors);
-	v = sysctl(req, 2, &num_processors, &len, NULL, 0);
-#else
-	num_processors = 1;
-#endif
-	if (num_processors < 1)
-		num_processors = 1;
-	if (!opt_n_threads)
-		opt_n_threads = num_processors;
 }
 
 static void parse_config(void)
@@ -881,11 +845,16 @@ static void parse_cmdline(int argc, char *argv[])
 	int key;
 
 	while (1) {
-		key = getopt_long(argc, argv, "hVc:a:qDPr:s:T:t:o:O:u:p:", options, NULL);
+		key = getopt_long(argc, argv, short_options, options, NULL);
 		if (key < 0)
 			break;
 
 		parse_arg(key, optarg);
+	}
+	if (optind < argc) {
+		fprintf(stderr, "%s: unsupported non-option argument '%s'\n",
+			argv[0], argv[optind]);
+		show_usage_and_exit(1);
 	}
 
 	parse_config();
@@ -904,6 +873,24 @@ int main(int argc, char *argv[])
 	pthread_mutex_init(&time_lock, NULL);
 	pthread_mutex_init(&stats_lock, NULL);
 	pthread_mutex_init(&g_work_lock, NULL);
+
+#if defined(WIN32) || defined(WIN64)
+	SYSTEM_INFO sysinfo;
+	GetSystemInfo(&sysinfo);
+	num_processors = sysinfo.dwNumberOfProcessors;
+#elif defined(_SC_NPROCESSORS_ONLN)
+	num_processors = sysconf(_SC_NPROCESSORS_ONLN);
+#elif defined(HW_NCPU)
+	int req[] = { CTL_HW, HW_NCPU };
+	size_t len = sizeof(num_processors);
+	v = sysctl(req, 2, &num_processors, &len, NULL, 0);
+#else
+	num_processors = 1;
+#endif
+	if (num_processors < 1)
+		num_processors = 1;
+	if (!opt_n_threads)
+		opt_n_threads = num_processors;
 
 	if (!rpc_userpass) {
 		if (!rpc_user || !rpc_pass) {
@@ -927,6 +914,10 @@ int main(int argc, char *argv[])
 
 	thr_info = calloc(opt_n_threads + 2, sizeof(*thr));
 	if (!thr_info)
+		return 1;
+	
+	thr_hashrates = (double *) calloc(opt_n_threads, sizeof(double));
+	if (!thr_hashrates)
 		return 1;
 
 	/* init workio thread info */
@@ -959,8 +950,6 @@ int main(int argc, char *argv[])
 		}
 	} else
 		longpoll_thr_id = -1;
-	
-	thr_hashrates = (double *) calloc(opt_n_threads, sizeof(double));
 
 	/* start mining threads */
 	for (i = 0; i < opt_n_threads; i++) {
@@ -975,8 +964,6 @@ int main(int argc, char *argv[])
 			applog(LOG_ERR, "thread %d create failed", i);
 			return 1;
 		}
-
-		sleep(1);	/* don't pound RPC server all at once */
 	}
 
 	applog(LOG_INFO, "%d miner threads started, "
