@@ -58,6 +58,31 @@ static inline void affine_to_cpu(int id, int cpu)
 	sched_setaffinity(0, sizeof(&set), &set);
 	applog(LOG_INFO, "Binding thread %d to cpu %d", id, cpu);
 }
+#elif defined(__APPLE__) & defined(__MACH__)
+#include <mach/thread_policy.h>
+#include <mach/mach.h>
+static inline void drop_policy(void)
+{
+	struct thread_precedence_policy policy;
+
+	policy.importance = 0;
+	thread_policy_set(mach_thread_self(), THREAD_PRECEDENCE_POLICY,
+				(thread_policy_t)&policy,
+				THREAD_PRECEDENCE_POLICY_COUNT);
+
+}
+
+static inline void affine_to_cpu(int id, int cpu)
+{
+	struct thread_affinity_policy policy;
+
+	policy.affinity_tag = cpu + 1;
+	if (thread_policy_set(mach_thread_self(), THREAD_AFFINITY_POLICY,
+				(thread_policy_t)&policy,
+				THREAD_AFFINITY_POLICY_COUNT) == KERN_SUCCESS) {
+		applog(LOG_INFO, "Binding thread %d to cpu %d", id, cpu);
+	}
+}
 #else
 static inline void drop_policy(void)
 {
