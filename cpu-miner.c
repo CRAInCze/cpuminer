@@ -658,7 +658,8 @@ start:
 		val = json_rpc_call(curl, lp_url, rpc_userpass, rpc_req,
 				    false, true, &err);
 		if (likely(val)) {
-			applog(LOG_INFO, "LONGPOLL detected new block");
+			if (!opt_quiet)
+				applog(LOG_INFO, "LONGPOLL detected new block");
 			soval = json_object_get(json_object_get(val, "result"), "submitold");
 			submit_old = soval ? json_is_true(soval) : false;
 			pthread_mutex_lock(&g_work_lock);
