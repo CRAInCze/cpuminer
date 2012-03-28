@@ -36,34 +36,6 @@ void *alloca (size_t);
 # endif
 #endif
 
-
-#if ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))
-#define WANT_BUILTIN_BSWAP
-#else
-#if HAVE_BYTESWAP_H
-#include <byteswap.h>
-#elif defined(USE_SYS_ENDIAN_H)
-#include <sys/endian.h>
-#elif defined(__APPLE__)
-#include <libkern/OSByteOrder.h>
-#define bswap_16 OSSwapInt16
-#define bswap_32 OSSwapInt32
-#define bswap_64 OSSwapInt64
-#else
-#define	bswap_16(value)  \
- 	((((value) & 0xff) << 8) | ((value) >> 8))
-
-#define	bswap_32(value)	\
- 	(((uint32_t)bswap_16((uint16_t)((value) & 0xffff)) << 16) | \
- 	(uint32_t)bswap_16((uint16_t)((value) >> 16)))
- 
-#define	bswap_64(value)	\
- 	(((uint64_t)bswap_32((uint32_t)((value) & 0xffffffff)) \
- 	    << 32) | \
- 	(uint64_t)bswap_32((uint32_t)((value) >> 32)))
-#endif
-#endif /* !defined(__GLXBYTEORDER_H__) */
-
 #ifdef HAVE_SYSLOG_H
 #include <syslog.h>
 #else
@@ -89,11 +61,12 @@ enum {
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 #endif
 
-struct thr_info {
-	int		id;
-	pthread_t	pth;
-	struct thread_q	*q;
-};
+#if ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))
+#define WANT_BUILTIN_BSWAP
+#else
+#define bswap_32(x) ((((x) << 24) & 0xff000000u) | (((x) << 8) & 0x00ff0000u) \
+                   | (((x) >> 8) & 0x0000ff00u) | (((x) >> 24) & 0x000000ffu))
+#endif
 
 static inline uint32_t swab32(uint32_t v)
 {
@@ -102,21 +75,6 @@ static inline uint32_t swab32(uint32_t v)
 #else
 	return bswap_32(v);
 #endif
-}
-
-static inline void swap256(void *dest_p, const void *src_p)
-{
-	uint32_t *dest = dest_p;
-	const uint32_t *src = src_p;
-
-	dest[0] = src[7];
-	dest[1] = src[6];
-	dest[2] = src[5];
-	dest[3] = src[4];
-	dest[4] = src[3];
-	dest[5] = src[2];
-	dest[6] = src[1];
-	dest[7] = src[0];
 }
 
 static inline uint32_t be32dec(const void *pp)
@@ -151,43 +109,59 @@ static inline void le32enc(void *pp, uint32_t x)
 	p[3] = (x >> 24) & 0xff;
 }
 
-extern bool opt_debug;
-extern bool opt_protocol;
+void sha256_init(uint32_t *state);
+void sha256_transform(uint32_t *state, const uint32_t *block, int swap);
 
-extern json_t *json_rpc_call(CURL *curl, const char *url, const char *userpass,
-			     const char *rpc_req, bool, bool, int *);
-extern char *bin2hex(const unsigned char *p, size_t len);
-extern bool hex2bin(unsigned char *p, const char *hexstr, size_t len);
+#if defined(__x86_64__)
+#define HAVE_SHA256_4WAY 1
+int sha256_use_4way();
+void sha256_init_4way(uint32_t *state);
+void sha256_transform_4way(uint32_t *state, const uint32_t *block, int swap);
+#endif
+
+extern int scanhash_sha256d(int thr_id, uint32_t *pdata,
+	const uint32_t *ptarget, uint32_t max_nonce, unsigned long *hashes_done);
 
 extern unsigned char *scrypt_buffer_alloc();
-extern int scanhash_scrypt(int thr_id, unsigned char *pdata,
-	unsigned char *scratchbuf, const unsigned char *ptarget,
-	uint32_t max_nonce, uint32_t *next_nonce, unsigned long *hashes_done);
+extern int scanhash_scrypt(int thr_id, uint32_t *pdata,
+	unsigned char *scratchbuf, const uint32_t *ptarget,
+	uint32_t max_nonce, unsigned long *hashes_done);
 
-extern int
-timeval_subtract (struct timeval *result, struct timeval *x, struct timeval *y);
-
-extern bool fulltest(const unsigned char *hash, const unsigned char *target);
-
-extern int opt_timeout;
-extern bool want_longpoll;
-extern bool have_longpoll;
-extern char *opt_proxy;
-extern long opt_proxy_type;
-struct thread_q;
+struct thr_info {
+	int		id;
+	pthread_t	pth;
+	struct thread_q	*q;
+};
 
 struct work_restart {
 	volatile unsigned long	restart;
 	char			padding[128 - sizeof(unsigned long)];
 };
 
-extern pthread_mutex_t time_lock;
+extern bool opt_debug;
+extern bool opt_protocol;
+extern int opt_timeout;
+extern bool want_longpoll;
+extern bool have_longpoll;
+extern char *opt_proxy;
+extern long opt_proxy_type;
 extern bool use_syslog;
+extern pthread_mutex_t time_lock;
 extern struct thr_info *thr_info;
 extern int longpoll_thr_id;
 extern struct work_restart *work_restart;
 
 extern void applog(int prio, const char *fmt, ...);
+extern json_t *json_rpc_call(CURL *curl, const char *url, const char *userpass,
+	const char *rpc_req, bool, bool, int *);
+extern char *bin2hex(const unsigned char *p, size_t len);
+extern bool hex2bin(unsigned char *p, const char *hexstr, size_t len);
+extern int timeval_subtract(struct timeval *result, struct timeval *x,
+	struct timeval *y);
+extern bool fulltest(const uint32_t *hash, const uint32_t *target);
+
+struct thread_q;
+
 extern struct thread_q *tq_new(void);
 extern void tq_free(struct thread_q *tq);
 extern bool tq_push(struct thread_q *tq, void *data);
