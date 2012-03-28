@@ -18,7 +18,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <time.h>
-#if defined(WIN32) || defined(WIN64)
+#if defined(WIN32)
 #include <windows.h>
 #elif defined(sun) || defined(__sun)
 #include <sys/resource.h>
@@ -84,10 +84,12 @@ struct workio_cmd {
 
 enum sha256_algos {
 	ALGO_SCRYPT,		/* scrypt(1024,1,1) */
+	ALGO_SHA256D,		/* SHA-256d */
 };
 
 static const char *algo_names[] = {
 	[ALGO_SCRYPT]		= "scrypt",
+	[ALGO_SHA256D]		= "sha256d",
 };
 
 bool opt_debug = false;
@@ -125,6 +127,9 @@ double *thr_hashrates;
 static char const usage[] = "\
 Usage: " PROGRAM_NAME " [OPTIONS]\n\
 Options:\n\
+  -a, --algo=ALGO       specify the algorithm to use\n\
+                          scrypt    scrypt(1024, 1, 1) (default)\n\
+                          sha256d   SHA-256d\n\
   -o, --url=URL         URL of mining server (default: " DEF_RPC_URL ")\n\
   -O, --userpass=U:P    username:password pair for mining server\n\
   -u, --user=USERNAME   username for mining server\n\
@@ -175,15 +180,12 @@ static struct option const options[] = {
 	{ "user", 1, NULL, 'u' },
 	{ "userpass", 1, NULL, 'O' },
 	{ "version", 0, NULL, 'V' },
-
-	{ }
+	{ 0, 0, 0, 0 }
 };
 
 struct work {
-	unsigned char	data[128];
-	unsigned char	target[32];
-
-	unsigned char	hash[32];
+	uint32_t data[32];
+	uint32_t target[8];
 };
 
 static struct work g_work;
@@ -214,6 +216,8 @@ static bool jobj_binary(const json_t *obj, const char *key,
 
 static bool work_decode(const json_t *val, struct work *work)
 {
+	int i;
+	
 	if (unlikely(!jobj_binary(val, "data", work->data, sizeof(work->data)))) {
 		applog(LOG_ERR, "JSON inval data");
 		goto err_out;
@@ -223,7 +227,10 @@ static bool work_decode(const json_t *val, struct work *work)
 		goto err_out;
 	}
 
-	memset(work->hash, 0, sizeof(work->hash));
+	for (i = 0; i < ARRAY_SIZE(work->data); i++)
+		work->data[i] = le32dec(work->data + i);
+	for (i = 0; i < ARRAY_SIZE(work->target); i++)
+		work->target[i] = le32dec(work->target + i);
 
 	return true;
 
@@ -231,7 +238,7 @@ err_out:
 	return false;
 }
 
-static bool submit_upstream_work(CURL *curl, const struct work *work)
+static bool submit_upstream_work(CURL *curl, struct work *work)
 {
 	char *hexstr = NULL;
 	json_t *val, *res;
@@ -241,11 +248,16 @@ static bool submit_upstream_work(CURL *curl, const struct work *work)
 	bool rc = false;
 
 	/* pass if the previous hash is not the current previous hash */
-	if (!submit_old && memcmp(work->data + 4, g_work.data + 4, 32))
+	if (!submit_old && memcmp(work->data + 1, g_work.data + 1, 32)) {
+		if (opt_debug)
+			applog(LOG_DEBUG, "DEBUG: stale work detected, discarding");
 		return true;
+	}
 
 	/* build hex string */
-	hexstr = bin2hex(work->data, sizeof(work->data));
+	for (i = 0; i < ARRAY_SIZE(work->data); i++)
+		le32enc(work->data + i, work->data[i]);
+	hexstr = bin2hex((unsigned char *)work->data, sizeof(work->data));
 	if (unlikely(!hexstr)) {
 		applog(LOG_ERR, "submit_upstream_work OOM");
 		goto out;
@@ -272,11 +284,12 @@ static bool submit_upstream_work(CURL *curl, const struct work *work)
 	json_is_true(res) ? accepted_count++ : rejected_count++;
 	pthread_mutex_unlock(&stats_lock);
 	
-	applog(LOG_INFO, "accepted: %lu/%lu (%.2f%%), %.2f khash/s %s",
+	sprintf(s, hashrate >= 1e6 ? "%.0f" : "%.2f", 1e-3 * hashrate);
+	applog(LOG_INFO, "accepted: %lu/%lu (%.2f%%), %s khash/s %s",
 	       accepted_count,
 	       accepted_count + rejected_count,
 	       100. * accepted_count / (accepted_count + rejected_count),
-	       1e-3 * hashrate,
+	       s,
 	       json_is_true(res) ? "(yay!!!)" : "(booooo)");
 
 	json_decref(val);
@@ -483,8 +496,9 @@ static void *miner_thread(void *userdata)
 {
 	struct thr_info *mythr = userdata;
 	int thr_id = mythr->id;
+	struct work work;
 	uint32_t max_nonce;
-	uint32_t next_nonce;
+	uint32_t end_nonce = 0xffffffffU / opt_n_threads * (thr_id + 1) - 4;
 	unsigned char *scratchbuf = NULL;
 
 	/* Set worker threads to nice 19 and then preferentially to SCHED_IDLE
@@ -504,7 +518,6 @@ static void *miner_thread(void *userdata)
 	}
 
 	while (1) {
-		struct work work __attribute__((aligned(128)));
 		unsigned long hashes_done;
 		struct timeval tv_start, tv_end, diff;
 		int64_t max64;
@@ -512,7 +525,8 @@ static void *miner_thread(void *userdata)
 
 		/* obtain new work from internal workio thread */
 		pthread_mutex_lock(&g_work_lock);
-		if (!have_longpoll || time(NULL) >= g_work_time + LP_SCANTIME*3/4) {
+		if (!have_longpoll || time(NULL) >= g_work_time + LP_SCANTIME*3/4
+			|| work.data[19] >= end_nonce) {
 			if (unlikely(!get_work(mythr, &g_work))) {
 				applog(LOG_ERR, "work retrieval failed, exiting "
 					"mining thread %d", mythr->id);
@@ -525,8 +539,9 @@ static void *miner_thread(void *userdata)
 		}
 		if (memcmp(work.data, g_work.data, 76)) {
 			memcpy(&work, &g_work, sizeof(struct work));
-			next_nonce = 0xffffffffU / opt_n_threads * thr_id;
-		}
+			work.data[19] = 0xffffffffU / opt_n_threads * thr_id;
+		} else
+			work.data[19]++;
 		pthread_mutex_unlock(&g_work_lock);
 		work_restart[thr_id].restart = 0;
 		
@@ -535,11 +550,11 @@ static void *miner_thread(void *userdata)
 		      - time(NULL);
 		max64 *= thr_hashrates[thr_id];
 		if (max64 <= 0)
-			max64 = 0xfffLL;
-		if (next_nonce + max64 > 0xfffffffeLL)
-			max_nonce = 0xfffffffeU;
+			max64 = opt_algo == ALGO_SCRYPT ? 0xfffLL : 0xfffffLL;
+		if (work.data[19] + max64 > end_nonce)
+			max_nonce = end_nonce;
 		else
-			max_nonce = next_nonce + max64;
+			max_nonce = work.data[19] + max64;
 		
 		hashes_done = 0;
 		gettimeofday(&tv_start, NULL);
@@ -548,7 +563,12 @@ static void *miner_thread(void *userdata)
 		switch (opt_algo) {
 		case ALGO_SCRYPT:
 			rc = scanhash_scrypt(thr_id, work.data, scratchbuf, work.target,
-			                     max_nonce, &next_nonce, &hashes_done);
+			                     max_nonce, &hashes_done);
+			break;
+
+		case ALGO_SHA256D:
+			rc = scanhash_sha256d(thr_id, work.data, work.target,
+			                      max_nonce, &hashes_done);
 			break;
 
 		default:
@@ -565,9 +585,13 @@ static void *miner_thread(void *userdata)
 				hashes_done / (diff.tv_sec + 1e-6 * diff.tv_usec);
 			pthread_mutex_unlock(&stats_lock);
 		}
-		if (!opt_quiet)
-			applog(LOG_INFO, "thread %d: %lu hashes, %.2f khash/s",
-				   thr_id, hashes_done, 1e-3 * thr_hashrates[thr_id]);
+		if (!opt_quiet) {
+			char s[16];
+			sprintf(s, thr_hashrates[thr_id] >= 1e6 ? "%.0f" : "%.2f",
+				1e-3 * thr_hashrates[thr_id]);
+			applog(LOG_INFO, "thread %d: %lu hashes, %s khash/s",
+				thr_id, hashes_done, s);
+		}
 
 		/* if nonce found, submit work */
 		if (rc && !submit_work(mythr, &work))
@@ -896,7 +920,7 @@ int main(int argc, char *argv[])
 	pthread_mutex_init(&stats_lock, NULL);
 	pthread_mutex_init(&g_work_lock, NULL);
 
-#if defined(WIN32) || defined(WIN64)
+#if defined(WIN32)
 	SYSTEM_INFO sysinfo;
 	GetSystemInfo(&sysinfo);
 	num_processors = sysinfo.dwNumberOfProcessors;
@@ -1000,4 +1024,3 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
-
